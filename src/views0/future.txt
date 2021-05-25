@@ -1,0 +1,79 @@
+User.vue:
+
+    <div v-if="!currentUser.active" class="alert alert-danger col-md-12" role="alert">
+      Клієнт заблокований!
+    </div>
+
+---------------------------------------------------------
+
+    <div>
+      <button v-bind:disabled="!currentUser.active" type="button"
+              class="btn btn-danger" style="width: 100%" data-toggle="modal"
+              data-target="#blockUserSubmit">Заблокувати
+      </button>
+      <div class="modal fade" id="blockUserSubmit" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title">Підтвердження</h5></div>
+            <div class="modal-body"><p>Ви впевнені, що хочете заблокувати користувача: <b>{{ currentUser.username }}</b>?
+              Відмінити цю дію буде неможливо!</p></div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" @click="blockUser" data-dismiss="modal">Заблокувати</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+--------------------------------------------------------------------------------------
+
+        updateActive(status) {
+          var data = {
+            id: this.currentUser.id,
+            username: this.currentUser.username,
+            name: this.currentUser.name,
+            email: this.currentUser.email,
+          };
+          UserService.update(this.currentUser.id, data)
+              .then(response => {
+                this.currentUser.published = status;
+                console.log(response.data);
+              })
+              .catch(e => {
+                console.log(e);
+              });
+        },
+
+-----------------------------------------------------------------------------
+
+UserList.vue
+
+            <h6 v-bind:class="[currentClient.active ? 'card-subtitle mb-2 text-success' : 'card-subtitle mb-2 text-danger']">
+              <label><strong>Статус:</strong></label> {{ currentClient.active ? "Активний" : "Заблокований" }}</h6>
+
+-------------------------------------------------------------------------------
+
+user.service.js
+
+    delete(id) {
+        return http.delete(API_URL+`/${id}`);
+    }
+
+----------------------------------------------------------------------------------
+
+legal-client.service.js
+
+    findByEdrpou(edrpou) {
+        //eslint-disable-next-line
+        console.log("GET Request to all legal-clients by edrpou")
+
+        return axios.get(API_URL+`?edrpou=${edrpou}`, {
+            headers: authHeader(),
+            responseType: "json"
+        }).then(response => {
+            return response;
+        }).catch(error => {
+            throw error
+        });
+    }
