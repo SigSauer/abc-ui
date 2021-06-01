@@ -54,7 +54,7 @@
         </div>
 
         <div class="form-group col-md-12">
-          <div v-if="message !== ''" class="alert alert-success col-md-10">{{ this.message }}</div>
+          <div v-if="message !== ''" class="alert alert-success">{{ this.message }}</div>
         </div>
       </div>
     </div>

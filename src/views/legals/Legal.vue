@@ -12,10 +12,10 @@
 
     <div v-if="currentClient" class="edit-form">
 
-      <div v-if="!currentClient.active" class="alert alert-danger col-md-12" role="alert">
-        Клієнт заблокований!
-      </div>
-      <form>
+      <div v-if="!currentClient.active" class="alert alert-danger col-md-12" role="alert">Клієнт заблокований!</div>
+
+
+      <form @change="onEdit">
         <div class="form-row">
           <div class="form-group col-md-9">
             <label for="name">Повне найменування юридичної особи</label>
@@ -82,7 +82,7 @@
       </form>
       <div class="form-row" style="margin: 0 0 0 0">
         <button id="sub-btn" class="col-md-3 btn btn-success" type="submit"
-                @click="updateClient">Зберегти
+                v-bind:disabled="!edited" @click="updateClient">Зберегти
         </button>
         <label id="alert-message" class="col-md-8 alert fade">{{ message }}
           <button id="alert-hide" aria-label="fade" class="close" type="button" @click="hideAlert">&times;</button>
@@ -183,7 +183,7 @@ export default {
         this.message = 'Обов`язкові поля не можуть бути пустими';
       } else if (client.edrpou.length !== 8) {
         this.message = 'Некоректно вказаний код ЄДРПОУ';
-      } else if (client.leadMobile !== 12) {
+      } else if (client.leadMobile.length !== 12) {
         this.message = 'Некоректно вказаний номер телефону керівника';
       } else {
         $('#edrpou').addClass('is-valid');
@@ -196,7 +196,7 @@ export default {
       if (ans) {
         this.message = 'Дані клієнта успішно оновлені';
         this.showAlert(true);
-        $('#edrpou').removeClass('is-invalid').removeClass('is-valid');
+        $('#edrpou').removeClass('is-invalid');
       } else {
         this.message = 'Не вдалось оновити дані клієнта';
         this.showAlert(false);

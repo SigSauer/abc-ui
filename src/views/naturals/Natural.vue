@@ -207,7 +207,7 @@ export default {
           client.docIssuers === '' || client.mobile === '' || client.tin === '') {
         this.message = 'Обов`язкові поля не можуть бути пустими';
       } else if (client.mobile.length !== 12 || client.mobile.substring(0, 3) !== "380") {
-        this.message = 'Некоректно вказаний номер телефону (380 XX XXX XX XX)';
+        this.message = 'Некоректно вказаний номер телефону';
       } else if (client.tin.length !== 10) {
         this.message = 'Некоректно вказаний ІПН';
       } else {
@@ -223,9 +223,9 @@ export default {
       if (ans) {
         this.message = 'Дані клієнта успішно оновлені';
         this.showAlert(true);
-        $('#mobile').removeClass('is-invalid', 'is-valid');
-        $('#tin').removeClass('is-invalid', 'is-valid');
-        $('#docNumber').removeClass('is-invalid', 'is-valid');
+        $('#mobile').removeClass('is-invalid');
+        $('#tin').removeClass('is-invalid');
+        $('#docNumber').removeClass('is-invalid');
       } else {
         this.message = 'Не вдалось оновити дані клієнта';
         this.showAlert(false);
@@ -261,7 +261,7 @@ forall {
   margin-top: 10px;
   max-width: 70%;
   margin-left: 13%;
-  padding: 0;
+  padding: 0 0 0 0;
 }
 
 #sub-btn {
