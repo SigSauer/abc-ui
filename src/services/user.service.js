@@ -2,7 +2,7 @@ import axios from 'axios';
 import authHeader from "./auth-header";
 
 
-const API_URL = 'http://localhost:8080/api/admin/users';
+const API_URL = 'https://api-abc-development.herokuapp.com/api/admin/users';
 
 const EMAIL = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 

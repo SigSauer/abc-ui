@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <nav class="navbar navbar-expand navbar-dark bg-dark">
-      <a class="navbar-brand" href="/">ABC Software</a>
+      <a class="navbar-brand" href="/">CRM Banking</a>
       <div class="navbar-nav mr-auto">
         <li class="nav-item">
           <router-link class="nav-link" to="/home">
