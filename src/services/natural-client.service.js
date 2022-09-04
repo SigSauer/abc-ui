@@ -104,6 +104,44 @@ class NaturalClientService {
             throw error;
         });
     }
+
+    sendEmail(id, userId, recipient, subject, body) {
+        return axios.post(API_URL + `/${id}/send`, {
+            userId: userId,
+            recipient: recipient,
+            subject: subject,
+            body: body
+        }, {
+            headers: authHeader(),
+            responseType: "json"
+        }).then(response => {
+            return response;
+        }, error => {
+            throw error
+        });
+    }
+
+    getEmails(id) {
+        return axios.get(API_URL + `/${id}/emails`,{
+            headers: authHeader(),
+            responseType: "json"
+        }).then(response => {
+            return response;
+        }, error => {
+            throw error
+        });
+    }
+
+    getProducts(id) {
+        return axios.get(API_URL + `/${id}/products`, {
+            headers: authHeader(),
+            responseType: "json"
+        }).then(response => {
+            return response;
+        }, error => {
+            throw error
+        });
+    }
 }
 
 export default new NaturalClientService();

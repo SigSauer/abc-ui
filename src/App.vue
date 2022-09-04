@@ -39,6 +39,12 @@
             Панель адміністратора
           </router-link>
         </li>
+        <li v-if="showMarketingBoard" class="nav-item">
+          <router-link class="nav-link" to="/admin/users">
+            <font-awesome-icon icon="archive"/>
+            Продукти
+          </router-link>
+        </li>
         <li class="nav-item">
           <router-link class="nav-link" to="/profile">
             <font-awesome-icon icon="user"/>
@@ -73,6 +79,12 @@ export default {
       }
       return false;
     },
+    showMarketingBoard() {
+      if (this.currentUser && this.currentUser.roles) {
+        return this.currentUser.roles.includes('ROLE_MARKETING');
+      }
+      return false;
+    }
   },
   methods: {
     logOut() {

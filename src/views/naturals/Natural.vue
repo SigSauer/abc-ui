@@ -29,12 +29,20 @@
           </div>
         </div>
         <div class="form-row">
-          <div class="form-group col-md-5">
+          <div class="form-group col-md-4">
             <label for="email">E-mail</label>
             <input id="email" v-model="currentClient.email" class="form-control"
                    placeholder="" type="text">
+
           </div>
-          <div class="form-group col-md-4">
+          <div class="form-group col-md-2">
+            <button class="form-control btn btn-info" data-target="#sendEmail"
+                    @click="getEmailText"
+                    data-toggle="modal" style="margin: 27% 0 0 0" type="button"
+                    v-bind:disabled="!currentClient.active">E-mail
+            </button>
+          </div>
+          <div class="form-group col-md-3">
             <label for="dob">Дата народження</label>
             <input id="dob" v-model="currentClient.dob" class="form-control"
                    placeholder="Обов'язкове поле" required type="date">
@@ -102,13 +110,55 @@
           </div>
         </div>
       </form>
-      <div class="form-row" style="margin: 0 0 0 0">
-        <button id="sub-btn" class="col-md-3 btn btn-success" type="submit"
+      <div class="form-row">
+        <!--        <button id="email-btn" class="col-md-3 btn btn-info" type="submit"-->
+        <!--                v-bind:disabled="!currentClient.active" @click="sendEmail">Надіслати E-mail-->
+        <!--        </button>-->
+
+        <button id="sub-btn" class="col-md-2 btn btn-success" type="submit"
                 v-bind:disabled="!edited" @click="updateClient">Зберегти
         </button>
-        <label id="alert-message" class="col-md-8 alert fade">{{ message }}
+        <label id="alert-message" class="col-md-6 alert fade">{{ message }}
           <button id="alert-hide" aria-label="fade" class="close" type="button" @click="hideAlert">&times;</button>
         </label>
+      </div>
+
+      <div class="form-row">
+        <div class="col-md-6">
+          <h6>Продукти</h6>
+          <div>
+            <ul id="productList" class="list-group">
+              <li v-for="(product, index) in products"
+                  :key="index"
+                  class="list-group-item"
+              >              <div class="list-group-item list-group-item-action flex-column">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">{{ product.name }}</h5>
+                  <small>{{ product.creationDate }}</small>
+                </div>
+                <p class="mb-1">{{ product.description }}</p>
+              </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <h6>Історія взаємодії</h6>
+          <ul id="emailList" class="list-group">
+            <li v-for="(email, index) in emails"
+                :key="index"
+                class="list-group-item"
+            >
+              <div class="list-group-item list-group-item-action flex-column">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">{{ email.subject }}</h5>
+                  <small>{{ email.creationDate }}</small>
+                </div>
+                <p class="mb-1">{{ email.body }}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
 
       <div id="blockClientSubmit" aria-hidden="true" class="modal fade" role="dialog" tabindex="-1">
@@ -119,6 +169,35 @@
               Відмінити цю дію буде неможливо!</p></div>
             <div class="modal-footer">
               <button class="btn btn-danger" data-dismiss="modal" type="button" @click="blockClient">Заблокувати
+              </button>
+              <button class="btn btn-secondary" data-dismiss="modal" type="button">Закрити</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="sendEmail" aria-hidden="true" class="modal fade" role="dialog" tabindex="-1">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title">Створення нового E-mail</h5></div>
+            <form id="emailForm">
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  <label for="emailTo">Отримувач</label>
+                  <input id="emailTo" v-model="emailTo" class="form-control">
+                </div>
+                <div class="form-group col-md-12">
+                  <label for="emailSub">Тема листа</label>
+                  <input id="emailSub" v-model="emailSubject" class="form-control" placeholder="Банк">
+                </div>
+                <div class="form-group col-md-12">
+                  <label for="emailSub">Тіло листа</label>
+                  <textarea id="emailField" v-model="emailText" class="form-control" style="height: 135px"></textarea>
+                </div>
+              </div>
+            </form>
+            <div class="modal-footer">
+              <button class="btn btn-primary" type="button" @click="sendEmail">Відправити
               </button>
               <button class="btn btn-secondary" data-dismiss="modal" type="button">Закрити</button>
             </div>
@@ -146,6 +225,11 @@ export default {
     return {
       def_title: '',
       currentClient: {},
+      emailTo: '',
+      emailSubject: '',
+      emailText: '',
+      products: [],
+      emails: [],
 
       message: '',
       code: true,
@@ -158,6 +242,24 @@ export default {
           .then(response => {
             this.currentClient = response.data;
             this.def_title = this.currentClient.name;
+          }, error => {
+            this.message = 'Не вдалось завантажити дані клієнта!';
+            this.showAlert(false);
+            // eslint-disable-next-line
+            console.log(error.response);
+          });
+      NaturalClientService.getProducts(id)
+          .then(response => {
+            this.products = response.data;
+          }, error => {
+            this.message = 'Не вдалось завантажити дані клієнта!';
+            this.showAlert(false);
+            // eslint-disable-next-line
+            console.log(error.response);
+          });
+      NaturalClientService.getEmails(id)
+          .then(response => {
+            this.emails = response.data;
           }, error => {
             this.message = 'Не вдалось завантажити дані клієнта!';
             this.showAlert(false);
@@ -177,6 +279,23 @@ export default {
     },
     blockClient() {
       NaturalClientService.block(this.currentClient.id)
+          .then(response => {
+            this.getClient(this.currentClient.id);
+            // eslint-disable-next-line
+            console.log(response.data);
+          }, error => {
+            this.message = 'Не вдалось заблокувати клієнта';
+            this.showAlert(false);
+            // eslint-disable-next-line
+            console.log(error.response);
+          });
+    },
+    getEmailText() {
+      this.emailTo = this.currentClient.email;
+      this.emailText = ''.concat(this.currentClient.sex ? 'Шановний ' : 'Шановна ', this.currentClient.name, '!\n \n \n');
+    },
+    sendEmail() {
+      NaturalClientService.sendEmail(this.currentClient.id, this.$store.state.auth.user.id, this.emailTo, this.emailSubject, this.emailText)
           .then(response => {
             this.getClient(this.currentClient.id);
             // eslint-disable-next-line
@@ -226,6 +345,9 @@ export default {
         $('#mobile').removeClass('is-invalid');
         $('#tin').removeClass('is-invalid');
         $('#docNumber').removeClass('is-invalid');
+      } else if (message.includes('sex')) {
+        this.message = 'Виявлено неспівпадіння даних'
+        this.showAlert(false);
       } else {
         this.message = 'Не вдалось оновити дані клієнта';
         this.showAlert(false);
@@ -264,14 +386,23 @@ forall {
   padding: 0 0 0 0;
 }
 
+#emailForm {
+  margin: 0 2% 0 2%;
+}
+
+#email-btn {
+  padding: .3rem .3rem .3rem .3rem;
+  margin: 0 0 0 0;
+}
+
 #sub-btn {
   padding: .3rem .3rem .3rem .3rem;
-  margin-bottom: initial;
+  margin: 0 0 0 1%;
 }
 
 #alert-message {
-  padding: .3rem .3rem .3rem .5rem;
-  margin: 0 0 0 8%;
+  padding: .3rem .3rem .3rem .3rem;
+  margin: 0 0 0 1%;
 }
 
 #alert-hide {

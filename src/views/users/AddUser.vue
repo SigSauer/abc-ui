@@ -31,10 +31,30 @@
                    placeholder="" type="text">
           </div>
           <div id="switch-form" class="form-group col-md-9">
-            <label>Права адміністратора</label>
-            <div class="form-check form-switch">
-              <input id="ROLE_ADMIN" v-model="isAdmin" class="form-check-input" type="checkbox" value="ROLE_ADMIN">
-              <label class="form-check-label" for="ROLE_ADMIN">Адміністратор</label>
+            <label>Рівень доступу</label>
+            <div class="form-check">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="ROLE_ADMIN" value="ROLE_ADMIN" v-model="role"/>
+                <label class="form-check-label" for="ROLE_ADMIN">Адміністратор</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="ROLE_MANAGER" value="ROLE_MANAGER" v-model="role"/>
+                <label class="form-check-label" for="ROLE_MANAGER">Клієнт-менеджер</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="ROLE_RISK" value="ROLE_RISK" v-model="role"/>
+                <label class="form-check-label" for="ROLE_RISK">Ризик-менеджер</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="ROLE_MARKETING" value="ROLE_MARKETING" v-model="role"/>
+                <label class="form-check-label" for="ROLE_MARKETING">Маркетинг-менеджер</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="ROLE_COLLECTOR" value="ROLE_COLLECTOR" v-model="role"/>
+                <label class="form-check-label" for="ROLE_COLLECTOR">Менеджер по стягненю</label>
+              </div>
+              <!--              <input id="ROLE_ADMIN" v-model="isAdmin" class="form-check-input" type="checkbox" value="ROLE_ADMIN">-->
+              <!--              <label class="form-check-label" for="ROLE_ADMIN">Адміністратор</label>-->
             </div>
           </div>
         </div>
@@ -61,7 +81,7 @@ export default {
   name: "add-user",
   data() {
     return {
-      isAdmin: false,
+      role: '',
       message: '',
       user: {
         id: null,
@@ -80,7 +100,7 @@ export default {
           username: this.user.username,
           name: this.user.name,
           email: this.user.email,
-          roles: this.isAdmin ? Array.of('ROLE_ADMIN', "ROLE_USER") : Array.of("ROLE_USER")
+          roles: Array.of(this.role)
         };
         UserService.create(data)
             .then(response => {

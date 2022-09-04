@@ -33,12 +33,31 @@
           <textarea id="token" class="form-control" disabled rows="3"
                     style="resize: none" type="text" v-bind:value="currentUser.accessToken"></textarea>
         </div>
-        <div id="switch-form" class="form-group col-md-12">
-          <label>Права адміністратора</label>
-          <div id="check-b" class="form-check form-switch">
-            <input id="ROLE_ADMIN" v-model="isAdmin" class="form-check-input" disabled
-                   type="checkbox" value="ROLE_ADMIN">
-            <label class="form-check-label" for="ROLE_ADMIN">Адміністратор</label>
+        <div id="switch-form" class="form-group col-md-9">
+          <label>Рівень доступу</label>
+          <div class="form-check">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="ROLE_ADMIN" value="ROLE_ADMIN" v-model="role" disabled/>
+              <label class="form-check-label" for="ROLE_ADMIN">Адміністратор</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="ROLE_MANAGER" value="ROLE_MANAGER" v-model="role" disabled/>
+              <label class="form-check-label" for="ROLE_MANAGER">Клієнт-менеджер</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="ROLE_RISK" value="ROLE_RISK" v-model="role" disabled/>
+              <label class="form-check-label" for="ROLE_RISK">Ризик-менеджер</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="ROLE_MARKETING" value="ROLE_MARKETING" v-model="role" disabled/>
+              <label class="form-check-label" for="ROLE_MARKETING">Маркетинг-менеджер</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" id="ROLE_COLLECTOR" value="ROLE_COLLECTOR" v-model="role" disabled/>
+              <label class="form-check-label" for="ROLE_COLLECTOR">Менеджер по стягненю</label>
+            </div>
+            <!--              <input id="ROLE_ADMIN" v-model="isAdmin" class="form-check-input" type="checkbox" value="ROLE_ADMIN">-->
+            <!--              <label class="form-check-label" for="ROLE_ADMIN">Адміністратор</label>-->
           </div>
         </div>
       </div>
@@ -69,8 +88,7 @@ export default {
   name: 'Profile',
   data() {
     return {
-      user_roles: ['ROLE_USER'],
-      isAdmin: false,
+      role: '',
       currentUser: {},
       message: ''
     };
@@ -91,7 +109,7 @@ export default {
   },
   mounted() {
     this.currentUser = this.$store.state.auth.user;
-    if (this.currentUser.roles.includes('ROLE_ADMIN')) this.isAdmin = true;
+    this.role = this.currentUser.roles[0];
     if (!this.currentUser) {
       this.$router.push('/login');
     }
@@ -114,9 +132,9 @@ export default {
   max-width: 70%;
 }
 
-#check-b {
-  margin-left: 4%;
-}
+/*#check-b {*/
+/*  margin-left: 4%;*/
+/*}*/
 
 .form-check-label {
 

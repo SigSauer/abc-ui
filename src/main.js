@@ -8,9 +8,10 @@ import VeeValidate from 'vee-validate';
 import Vuex from 'vuex';
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
-import {faUserShield, faServer, faCrown, faUsers ,faHospitalUser, faHome, faSignInAlt, faSignOutAlt, faUser, faUserPlus} from '@fortawesome/free-solid-svg-icons';
+import {faUserShield, faServer, faCrown, faUsers, faArchive, faHospitalUser, faHome, faSignInAlt, faSignOutAlt, faUser, faUserPlus} from '@fortawesome/free-solid-svg-icons';
 
-library.add(faUserShield, faServer, faCrown, faUsers, faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt, faHospitalUser);
+
+library.add(faUserShield, faServer, faCrown, faArchive, faUsers, faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt, faHospitalUser);
 
 Vue.config.productionTip = false;
 

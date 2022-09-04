@@ -24,12 +24,12 @@
           </div>
         </div>
         <div class="form-row">
-          <div class="form-group col-md-5">
+          <div class="form-group col-md-6">
             <label for="email">E-mail</label>
             <input id="email" v-model="client.email" class="form-control"
                    placeholder="" type="text">
           </div>
-          <div class="form-group col-md-4">
+          <div class="form-group col-md-3">
             <label for="dob">Дата народження</label>
             <input id="dob" v-model="client.dob" class="form-control"
                    placeholder="Обов'язкове поле" required type="date">
